@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
+    "babel-plugin-component": "^1.1.1",
     "less-loader": "^5.0.0",
+    "mint-ui": "^2.2.13",
+    "mockjs": "^1.1.0",
     "sass-loader": "^12.3.0",
     "style-loader": "^1.0.0",
     "swiper": "^7.2.0",

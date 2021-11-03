@@ -14,11 +14,12 @@
       FooterGuide
     },
     methods: {
-      ...mapActions(['getAddress'])
+      ...mapActions(['getAddress','getUserInfo'])
     },
     async mounted(){
       //this.$store.dispatch('getAddress')
       this.getAddress()
+      this.getUserInfo()
     }
   }
 </script>
