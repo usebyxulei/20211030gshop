@@ -2,11 +2,15 @@
  * 通过mutation间接更新state的多个方法的对象
  */
 import {
+    CLEAR_CART,
+    DECREMENT_FOOD_COUNT,
+    INCREMENT_FOOD_COUNT,
     RECEIVE_ADDRESS,
     RECEIVE_CATEGORYS,
     RECEIVE_GOODS,
     RECEIVE_INFO,
     RECEIVE_RATINGS,
+    RECEIVE_SEARCH_SHOPS,
     RECEIVE_SHOPS,
     RECEIVE_USER_INFO,
     RESET_USER_INFO,
@@ -15,6 +19,7 @@ import {
     reqAddress,
     reqFoodCategorys,
     reqLogout,
+    reqSearchShop,
     reqShopGoods,
     reqShopInfo,
     reqShopRatings,
@@ -87,20 +92,50 @@ export default {
     },
 
     //异步获取商家评价列表
-    async getShopRatings({commit}){
+    async getShopRatings({commit},callback){
         const result = await reqShopRatings()
         if(result.code === 0){
             const ratings = result.data
             commit(RECEIVE_RATINGS,{ratings})
+
+            // 数据更新了，通知一下组件
+            callback && callback()
         }
     },
 
     // 异步获取商家商品列表
-    async getShopGoods({commit}){
+    async getShopGoods({commit},callback){
         const result = await reqShopGoods()
         if(result.code === 0){
             const goods = result.data
             commit(RECEIVE_GOODS,{goods})
+
+            // 数据更新了，通知一下组件
+            callback && callback()
         }
     },
+
+    // 同步更新food中的count值
+    updateFoodCount({commit},{isAdd,food}){
+        if(isAdd) {
+            commit(INCREMENT_FOOD_COUNT,{food})
+        }else{
+            commit(DECREMENT_FOOD_COUNT,{food})
+        }
+    },
+
+    // 清空购物车
+    clearCart({commit}){
+        commit(CLEAR_CART)
+    },
+
+    // 异步
+    async searchShops({commit,state},keyword){
+        const geohash = state.latitude + ',' + state.longitude
+        const result = await reqSearchShop(geohash,keyword)
+        if(result.code === 0){
+            const searchShops = result.data
+            commit(RECEIVE_SEARCH_SHOPS,{searchShops})
+        }
+    }
 }
